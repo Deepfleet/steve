@@ -39,8 +39,12 @@ import ocpp.cs._2015._10.MeterValuesRequest;
 import ocpp.cs._2015._10.StartTransactionRequest;
 import ocpp.cs._2015._10.StatusNotificationRequest;
 import ocpp.cs._2015._10.StopTransactionRequest;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 
 import javax.annotation.PostConstruct;
 
@@ -53,6 +57,8 @@ public class Ocpp16WebSocketEndpoint extends AbstractWebSocketEndpoint {
 
     @Autowired private CentralSystemService16_SoapServer server;
     @Autowired private FutureResponseContextStore futureResponseContextStore;
+    
+    private final Logger log = LoggerFactory.getLogger(getClass());
 
     @PostConstruct
     public void init() {
@@ -74,6 +80,12 @@ public class Ocpp16WebSocketEndpoint extends AbstractWebSocketEndpoint {
         @Override
         protected ResponseType dispatch(RequestType params, String chargeBoxId) {
             ResponseType r;
+            if(params == null){
+                System.err.println("The param is null , unexpected but not fail");
+                return null;
+            }
+            System.out.println("Param ClassName :"+params != null ? params.getClass().getName() : params);
+            System.out.println("Param  :"+params.toString());
 
             if (params instanceof BootNotificationRequest) {
                 r = server.bootNotificationWithTransport((BootNotificationRequest) params, chargeBoxId, OcppProtocol.V_16_JSON);

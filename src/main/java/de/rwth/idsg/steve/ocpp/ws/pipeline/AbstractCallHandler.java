@@ -43,6 +43,8 @@ public abstract class AbstractCallHandler implements Consumer<CommunicationConte
 
         ResponseType response;
         try {
+            log.debug("Message ID :"+messageId);
+            log.debug(("Call"+call.getMessageType());
             response = dispatch(call.getPayload(), context.getChargeBoxId());
         } catch (Exception e) {
             log.error("Exception occurred", e);
